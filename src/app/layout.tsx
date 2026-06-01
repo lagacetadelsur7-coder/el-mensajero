@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Link from "next/link";
-import NavBar from "./components/NavBar";
+import NavBarClient from "./components/NavBarClient";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,139 +15,10 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return (
-    <html lang="es">
-      <body className={`${inter.className} bg-background text-foreground min-h-screen flex flex-col antialiased`}>
-        <NavBar />
-        <main className="flex-1 bg-[#f8fafc]">
-          {children}
-        </main>
-        {/* EDITORIAL FOOTER */}
-        <footer className="border-t border-slate-200 bg-white py-12">
-          <div className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div className="col-span-1 md:col-span-2">
-              <Link href="/" className="text-2xl font-serif font-black tracking-tighter text-slate-900">
-                EL MENSAJERO
-              </Link>
-              <p className="mt-4 text-sm text-slate-600 max-w-sm leading-relaxed">
-                Semanario digital de noticias, análisis, espectáculos y misterios. Información rápida y veraz con un enfoque único.
-              </p>
-            </div>
-            <div>
-              <h3 className="font-bold text-slate-900 mb-4 text-xs uppercase tracking-wider">Secciones</h3>
-              <ul className="space-y-2">
-                <li><Link href="/categoria/locales" className="text-sm text-slate-600 hover:text-slate-900">Locales</Link></li>
-                <li><Link href="/categoria/internacional" className="text-sm text-slate-600 hover:text-slate-900">Política Internacional</Link></li>
-                <li><Link href="/categoria/actualidad" className="text-sm text-slate-600 hover:text-slate-900">Actualidad</Link></li>
-                <li><Link href="/categoria/espectaculos" className="text-sm text-slate-600 hover:text-slate-900">Espectáculos</Link></li>
-                <li><Link href="/categoria/supernatural" className="text-sm text-slate-600 hover:text-slate-900">Supernatural</Link></li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="font-bold text-slate-900 mb-4 text-xs uppercase tracking-wider">Legal</h3>
-              <ul className="space-y-2">
-                <li><Link href="/terminos" className="text-sm text-slate-600 hover:text-slate-900">Términos y Condiciones</Link></li>
-                <li><Link href="/privacidad" className="text-sm text-slate-600 hover:text-slate-900">Política de Privacidad</Link></li>
-                <li><Link href="/revision/login" className="text-sm text-slate-600 hover:text-slate-900 font-semibold text-slate-800">Acceso Editores</Link></li>
-              </ul>
-            </div>
-          </div>
-          <div className="container mx-auto px-4 mt-12 pt-8 border-t border-slate-100 text-center text-xs text-slate-400 font-medium">
-            &copy; {new Date().getFullYear()} El Mensajero. Todos los derechos reservados.
-          </div>
-        </footer>
-      </body>
-    </html>
-  );
-}
-
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
-import Link from "next/link";
-import NavBar from "./components/NavBar";
-
-const inter = Inter({ subsets: ["latin"] });
-
-export const metadata: Metadata = {
-  title: "El Mensajero | Semanario Digital",
-  description: "Noticias locales, internacionales, espectáculos y supernatural."
-};
-
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+  // Navigation state moved to NavBarClient
   return (
     <html lang="es">
       <body className={`${inter.className} bg-background text-foreground min-h-screen flex flex-col antialiased`}> 
-        <NavBar />
-        <main className="flex-1 bg-[#f8fafc]">
-          {children}
-        </main>
-        {/* EDITORIAL FOOTER */}
-        <footer className="border-t border-slate-200 bg-white py-12">
-          <div className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div className="col-span-1 md:col-span-2">
-              <Link href="/" className="text-2xl font-serif font-black tracking-tighter text-slate-900">
-                EL MENSAJERO
-              </Link>
-              <p className="mt-4 text-sm text-slate-600 max-w-sm leading-relaxed">
-                Semanario digital de noticias, análisis, espectáculos y misterios. Información rápida y veraz con un enfoque único.
-              </p>
-            </div>
-            <div>
-              <h3 className="font-bold text-slate-900 mb-4 text-xs uppercase tracking-wider">Secciones</h3>
-              <ul className="space-y-2">
-                <li><Link href="/categoria/locales" className="text-sm text-slate-600 hover:text-slate-900">Locales</Link></li>
-                <li><Link href="/categoria/internacional" className="text-sm text-slate-600 hover:text-slate-900">Política Internacional</Link></li>
-                <li><Link href="/categoria/actualidad" className="text-sm text-slate-600 hover:text-slate-900">Actualidad</Link></li>
-                <li><Link href="/categoria/espectaculos" className="text-sm text-slate-600 hover:text-slate-900">Espectáculos</Link></li>
-                <li><Link href="/categoria/supernatural" className="text-sm text-slate-600 hover:text-slate-900">Supernatural</Link></li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="font-bold text-slate-900 mb-4 text-xs uppercase tracking-wider">Legal</h3>
-              <ul className="space-y-2">
-                <li><Link href="/terminos" className="text-sm text-slate-600 hover:text-slate-900">Términos y Condiciones</Link></li>
-                <li><Link href="/privacidad" className="text-sm text-slate-600 hover:text-slate-900">Política de Privacidad</Link></li>
-                <li><Link href="/revision/login" className="text-sm text-slate-600 hover:text-slate-900 font-semibold text-slate-800">Acceso Editores</Link></li>
-              </ul>
-            </div>
-          </div>
-          <div className="container mx-auto px-4 mt-12 pt-8 border-t border-slate-100 text-center text-xs text-slate-400 font-medium">
-            &copy; {new Date().getFullYear()} El Mensajero. Todos los derechos reservados.
-          </div>
-        </footer>
-      </body>
-    </html>
-  );
-}
-
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
-import Link from "next/link";
-import { Menu, X } from "lucide-react";
-import { useState } from "react";
-
-const inter = Inter({ subsets: ["latin"] });
-
-export const metadata: Metadata = {
-  title: "El Mensajero | Semanario Digital",
-  description: "Noticias locales, internacionales, espectáculos y supernatural.",
-};
-
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-  const [menuOpen, setMenuOpen] = useState(false);
-  return (
-    <html lang="es">
-      <body className={`${inter.className} bg-background text-foreground min-h-screen flex flex-col antialiased`}>
         {/* BRAND HEADER BAR (FRANJA OSCURA CON TITULO NEON Y LOGO) */}
         <div className="w-full bg-neutral-950 py-6 border-b border-neutral-900 text-center flex flex-col items-center justify-center select-none relative overflow-hidden">
           {/* Logo placeholder */}
@@ -162,56 +32,7 @@ export default function RootLayout({
             Semanario de Noticias Inteligente
           </p>
         </div>
-
-        {/* STICKY NAVIGATION BAR */}
-        <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur-md shadow-xs">
-          <div className="container mx-auto px-4 h-12 flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <button className="md:hidden p-2 -ml-2 text-slate-500 hover:text-slate-950" onClick={() => setMenuOpen(!menuOpen)}>
-                <Menu className="w-5 h-5" />
-              </button>
-              <Link href="/" className="font-serif font-black tracking-tight text-slate-900 text-base hover:text-slate-700 transition-colors">
-                EL MENSAJERO
-              </Link>
-            </div>
-            
-            <nav className="hidden md:flex items-center gap-6">
-              <Link href="/" className="text-xs font-bold uppercase tracking-wider text-slate-600 hover:text-slate-950 transition-colors">Inicio</Link>
-              <Link href="/categoria/locales" className="text-xs font-bold uppercase tracking-wider text-slate-600 hover:text-slate-950 transition-colors">Locales</Link>
-              <Link href="/categoria/internacional" className="text-xs font-bold uppercase tracking-wider text-slate-600 hover:text-slate-950 transition-colors">Internacionales</Link>
-              <Link href="/categoria/actualidad" className="text-xs font-bold uppercase tracking-wider text-slate-600 hover:text-slate-950 transition-colors">Actualidad</Link>
-              <Link href="/categoria/espectaculos" className="text-xs font-bold uppercase tracking-wider text-slate-600 hover:text-slate-950 transition-colors">Espectáculos</Link>
-              <Link href="/categoria/supernatural" className="text-xs font-bold uppercase tracking-wider text-purple-600 hover:text-purple-800 transition-colors flex items-center gap-1 font-extrabold">
-                ✦ Supernatural
-              </Link>
-            </nav>
-
-            <div className="flex items-center gap-4">
-              <Link href="/revision" className="text-[10px] font-bold uppercase tracking-wider bg-slate-900 text-white px-3.5 py-1.5 rounded-full hover:bg-slate-800 shadow-xs transition-colors">
-                Redacción
-              </Link>
-            </div>
-          </div>
-        </header>
-        {/* Mobile drawer menu */}
-        {menuOpen && (
-          <div className="fixed inset-0 bg-black/30 backdrop-blur-sm z-40" onClick={() => setMenuOpen(false)}>
-            <div className="absolute top-0 left-0 w-64 h-full bg-white shadow-lg p-4" onClick={e => e.stopPropagation()}>
-              <button className="mb-4" onClick={() => setMenuOpen(false)}>
-                <X className="w-5 h-5" />
-              </button>
-              <nav className="flex flex-col gap-4">
-                <Link href="/" className="text-base font-medium" onClick={() => setMenuOpen(false)}>Inicio</Link>
-                <Link href="/categoria/locales" className="text-base font-medium" onClick={() => setMenuOpen(false)}>Locales</Link>
-                <Link href="/categoria/internacional" className="text-base font-medium" onClick={() => setMenuOpen(false)}>Internacionales</Link>
-                <Link href="/categoria/actualidad" className="text-base font-medium" onClick={() => setMenuOpen(false)}>Actualidad</Link>
-                <Link href="/categoria/espectaculos" className="text-base font-medium" onClick={() => setMenuOpen(false)}>Espectáculos</Link>
-                <Link href="/categoria/supernatural" className="text-base font-medium" onClick={() => setMenuOpen(false)}>Supernatural</Link>
-                <Link href="/revision" className="text-base font-medium" onClick={() => setMenuOpen(false)}>Redacción</Link>
-              </nav>
-            </div>
-          </div>
-        )}
+        <NavBarClient />
 
         <main className="flex-1 bg-[#f8fafc]">
           {children}

@@ -158,8 +158,3 @@
   header { padding: 0.5rem 0; }
   .sticky { position: sticky; top: 0; }
 }
-
-/* Fin de media queries */
-
-  animation: neon-glow 3s ease-in-out infinite alternate;
-}
