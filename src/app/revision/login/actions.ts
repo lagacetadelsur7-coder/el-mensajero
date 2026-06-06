@@ -27,9 +27,9 @@ export async function login(formData: FormData) {
     return;
   }
 
-  // Verify password matches secret
-  const validPassword = process.env.EDITOR_PASSWORD;
-  if (!validPassword || password !== validPassword) {
+  // Verify password matches secret or fallback to hardcoded
+  const validPassword = process.env.EDITOR_PASSWORD || 'laliceamor29';
+  if (password !== validPassword) {
     redirect('/revision/login?error=invalid_password');
     return;
   }
@@ -74,8 +74,8 @@ export async function signup(formData: FormData) {
   }
 
   // Password must match the secret (same as login)
-  const validPassword = process.env.EDITOR_PASSWORD
-  if (!validPassword || password !== validPassword) {
+  const validPassword = process.env.EDITOR_PASSWORD || 'laliceamor29';
+  if (password !== validPassword) {
     redirect('/revision/login?error=invalid_password')
     return
   }
