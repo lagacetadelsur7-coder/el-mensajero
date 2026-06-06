@@ -1,8 +1,21 @@
-'use client'
+'use client';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { createClient } from '@/utils/supabase/client';
+import { Megaphone, Plus, Image as ImageIcon, Link as LinkIcon, Power, PowerOff, Edit3, X, Loader2 } from 'lucide-react';
+import { getAds, toggleAdActive, saveAd } from '../../actions/revision';
 
-import { useState, useEffect } from 'react'
-import { Megaphone, Plus, Image as ImageIcon, Link as LinkIcon, Power, PowerOff, Edit3, X, Loader2 } from 'lucide-react'
-import { getAds, toggleAdActive, saveAd } from '../../actions/revision'
+export default function AdsPage() {
+  const router = useRouter();
+
+  useEffect(() => {
+    const supabase = createClient();
+    supabase.auth.getUser().then(({ data: { user } }: any) => {
+      if (!user) {
+        router.replace('/revision/login');
+      }
+    });
+  }, []);
 
 type Publicidad = {
   id: string
@@ -12,7 +25,7 @@ type Publicidad = {
   activo: boolean
 }
 
-export default function PublicidadPage() {
+
   const [loading, setLoading] = useState(true)
   const [publicidades, setPublicidades] = useState<Publicidad[]>([])
   const [actionId, setActionId] = useState<string | null>(null)

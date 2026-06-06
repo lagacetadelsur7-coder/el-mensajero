@@ -1,12 +1,28 @@
-/* src/app/revision/layout.tsx */
 "use client";
-
+import { createClient } from '@/utils/supabase/client';
 import Link from 'next/link';
 import { LayoutDashboard, Newspaper, MessageSquare, Megaphone, LogOut, ArrowLeft } from 'lucide-react';
+import { useState, useEffect } from 'react';
+
+const EMAIL_TO_NAME: Record<string, string> = {
+  "cesar@elmensajero.com": "César",
+  "laura@elmensajero.com": "Laura",
+};
 
 export default function RevisionLayout({ children }: { children: React.ReactNode }) {
-  // Session info placeholder – authentication is optional for local dev
-  const sessionEmail = 'Invitado';
+  const [sessionName, setSessionName] = useState('Invitado');
+
+  useEffect(() => {
+    const supabase = createClient();
+    supabase.auth.getUser().then(({ data: { user } }: any) => {
+      const email = user?.email;
+      if (email) {
+        setSessionName(EMAIL_TO_NAME[email] || email);
+      } else {
+        setSessionName('Invitado');
+      }
+    });
+  }, []);
 
   return (
     <div className="flex min-h-screen bg-slate-50 text-slate-800">
@@ -21,7 +37,7 @@ export default function RevisionLayout({ children }: { children: React.ReactNode
           <div className="text-xs text-neutral-400 font-semibold uppercase tracking-wider mt-0.5">Control Editorial</div>
         </div>
         <nav className="flex-1 p-4 space-y-1.5">
-          <Link href="/revision" className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 text-slate-700 hover:text-slate-900 transition-all font-medium text-sm">
+          <Link href="/revision/newsroom" className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 text-slate-700 hover:text-slate-900 transition-all font-medium text-sm">
             <LayoutDashboard className="w-4 h-4 text-slate-450" />
             Newsroom / IA
           </Link>
@@ -29,7 +45,7 @@ export default function RevisionLayout({ children }: { children: React.ReactNode
             <Newspaper className="w-4 h-4 text-slate-450" />
             Borradores
           </Link>
-          <Link href="/revision/comentarios" className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 text-slate-700 hover:text-slate-900 transition-all font-medium text-sm">
+          <Link href="/revision/moderacion" className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 text-slate-700 hover:text-slate-900 transition-all font-medium text-sm">
             <MessageSquare className="w-4 h-4 text-slate-450" />
             Moderación
           </Link>
@@ -40,12 +56,13 @@ export default function RevisionLayout({ children }: { children: React.ReactNode
         </nav>
         <div className="p-4 border-t border-slate-100 bg-slate-50/50">
           <div className="text-xs text-slate-500 font-medium mb-3 px-3 truncate">
-            Sesión: <span className="font-bold text-slate-700">{sessionEmail}</span>
+            Sesión: <span className="font-bold text-slate-700">{sessionName}</span>
           </div>
-          {/* Sign‑out button is optional – no server route in local dev */}
-          <button className="flex w-full items-center justify-center gap-2 py-2 px-3 rounded-xl bg-white border border-slate-200 hover:bg-slate-50 text-slate-600 hover:text-slate-900 transition-all font-semibold text-xs shadow-sm" disabled>
-            <LogOut className="w-3.5 h-3.5 text-slate-450" /> Cerrar Sesión
-          </button>
+          <form method="post" action="/auth/signout">
+            <button type="submit" className="flex w-full items-center justify-center gap-2 py-2 px-3 rounded-xl bg-white border border-slate-200 hover:bg-slate-50 text-slate-600 hover:text-slate-900 transition-all font-semibold text-xs shadow-sm">
+              <LogOut className="w-3.5 h-3.5 text-slate-450" /> Cerrar Sesión
+            </button>
+          </form>
         </div>
       </aside>
 

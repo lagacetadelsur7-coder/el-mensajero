@@ -235,7 +235,7 @@ const columnist = articulo.columnistas as Columnist;
 
                 {comentarios && comentarios.length > 0 ? (
                   <div className="space-y-4">
-                    {comentarios.map((comentario) => {
+                    {comentarios.map((comentario: any) => {
                       const commInit = comentario.nick?.charAt(0).toUpperCase() || "?";
                       return (
                         <div 

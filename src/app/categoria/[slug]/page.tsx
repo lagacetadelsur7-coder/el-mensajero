@@ -74,7 +74,7 @@ export default async function CategoriaPage({ params }: { params: Promise<{ slug
       <div className="container mx-auto px-4 py-12 max-w-7xl">
         {articulos && articulos.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {articulos.map((article) => (
+            {articulos.map((article: any) => (
               <Link 
                 href={`/articulo/${article.id}`} 
                 key={article.id} 
@@ -107,7 +107,7 @@ export default async function CategoriaPage({ params }: { params: Promise<{ slug
                     <span>{formatDistanceToNow(new Date(article.fecha_creacion), { addSuffix: true, locale: es })}</span>
                     <span className="text-slate-300">&bull;</span>
                     <BookOpen className="w-3.5 h-3.5 text-slate-400" />
-                    <span className="font-semibold text-slate-700">{article.columnistas?.map(c => c.nombre).join(', ')}</span>
+                    <span className="font-semibold text-slate-700">{article.columnistas?.map((c: any) => c.nombre).join(', ')}</span>
                   </div>
                   
                   <h3 className={`text-lg font-serif font-black leading-snug mb-3 tracking-tight transition-colors ${

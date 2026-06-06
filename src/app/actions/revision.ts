@@ -18,7 +18,7 @@ export async function getDrafts() {
     return []
   }
 
-  return data.map(article => ({
+  return data.map((article: any) => ({
     id: article.id,
     titulo: article.titulo,
     subtitulo: article.subtitulo,
@@ -81,7 +81,7 @@ export async function getComments() {
     return []
   }
 
-  return data.map(comment => ({
+  return data.map((comment: any) => ({
     id: comment.id,
     articuloId: comment.articulo_id,
     articuloTitulo: comment.articulos?.titulo || 'Artículo Eliminado',

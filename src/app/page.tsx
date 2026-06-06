@@ -86,7 +86,7 @@ export default async function Home() {
     .eq("activo", true)
     .order("fecha_creacion", { ascending: false });
 
-  const sidebarAd = ads?.find(ad => ad.ubicacion === "portada_lateral");
+  const sidebarAd = ads?.find((ad: any) => ad.ubicacion === "portada_lateral");
 
   return (
     <div className="container mx-auto px-4 py-10 max-w-7xl">
@@ -284,7 +284,7 @@ export default async function Home() {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-12">
-            {recentArticles?.map((article) => (
+            {recentArticles?.map((article: any) => (
               <Link 
                 href={`/articulo/${article.id}`} 
                 key={article.id} 
@@ -354,7 +354,7 @@ export default async function Home() {
             
             <div className="mt-4 space-y-6">
               {supernaturalArticles && supernaturalArticles.length > 0 ? (
-                supernaturalArticles.map((article) => (
+                supernaturalArticles.map((article: any) => (
                   <Link 
                     href={`/articulo/${article.id}`} 
                     key={article.id} 

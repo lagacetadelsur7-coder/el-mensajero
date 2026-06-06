@@ -2,11 +2,31 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Menu, X } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { createClient } from "../../utils/supabase/client";
+
+// Map editor emails to display names
+const EMAIL_TO_NAME: Record<string, string> = {
+  "cesar@elmensajero.com": "César",
+  "laura@elmensajero.com": "Laura",
+};
 
 export default function NavBarClient() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [user, setUser] = useState<any>(null);
+  const router = useRouter();
+
+  useEffect(() => {
+    const supabase = createClient();
+    supabase.auth.getUser().then(({ data: { user } }: any) => {
+      setUser(user);
+    });
+  }, []);
+
+  // Determine display name
+  const displayName = user ? EMAIL_TO_NAME[user.email ?? ""] || user.email : null;
 
   return (
     <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur-md shadow-xs">
@@ -45,14 +65,34 @@ export default function NavBarClient() {
             ✦ Supernatural
           </Link>
         </nav>
-        <div className="flex items-center gap-4">
-          <Link
-            href="/revision"
-            className="text-[10px] font-bold uppercase tracking-wider bg-slate-900 text-white px-3.5 py-1.5 rounded-full hover:bg-slate-800 shadow-xs transition-colors"
-          >
+        {user ? (
+          <div className="flex items-center gap-4">
+            <form method="post" action="/auth/signout" className="inline ml-2">
+              <button type="submit" className="text-[10px] font-bold uppercase tracking-wider bg-red-600 text-white px-3.5 py-1.5 rounded-full hover:bg-red-700 transition-colors">
+                Logout
+              </button>
+            </form>
+            <span className="text-[10px] font-bold uppercase tracking-wider bg-slate-800 text-white px-3.5 py-1.5 rounded-full">
+              {displayName}
+            </span>
+            <Link href="/revision/newsroom" className="text-[10px] font-bold uppercase tracking-wider bg-slate-800 text-white px-3.5 py-1.5 rounded-full hover:bg-slate-700 transition-colors">
+              Newsroom
+            </Link>
+            <Link href="/revision/borradores" className="text-[10px] font-bold uppercase tracking-wider bg-slate-800 text-white px-3.5 py-1.5 rounded-full hover:bg-slate-700 transition-colors">
+              Borradores
+            </Link>
+            <Link href="/revision/moderacion" className="text-[10px] font-bold uppercase tracking-wider bg-slate-800 text-white px-3.5 py-1.5 rounded-full hover:bg-slate-700 transition-colors">
+              Moderación
+            </Link>
+            <Link href="/revision/publicidad" className="text-[10px] font-bold uppercase tracking-wider bg-slate-800 text-white px-3.5 py-1.5 rounded-full hover:bg-slate-700 transition-colors">
+              Publicidad
+            </Link>
+          </div>
+        ) : (
+          <Link href="/revision/login" className="text-[10px] font-bold uppercase tracking-wider bg-slate-900 text-white px-3.5 py-1.5 rounded-full hover:bg-slate-800 shadow-xs transition-colors">
             Redacción
           </Link>
-        </div>
+        )}
       </div>
       {/* Mobile drawer */}
       {menuOpen && (
@@ -86,9 +126,31 @@ export default function NavBarClient() {
               <Link href="/categoria/supernatural" className="text-base font-medium" onClick={() => setMenuOpen(false)}>
                 Supernatural
               </Link>
-              <Link href="/revision" className="text-base font-medium" onClick={() => setMenuOpen(false)}>
-                Redacción
-              </Link>
+              {user ? (
+                <>
+                  <Link href="/revision/newsroom" className="text-base font-medium" onClick={() => setMenuOpen(false)}>
+                    Newsroom
+                  </Link>
+                  <Link href="/revision/borradores" className="text-base font-medium" onClick={() => setMenuOpen(false)}>
+                    Borradores
+                  </Link>
+                  <Link href="/revision/moderacion" className="text-base font-medium" onClick={() => setMenuOpen(false)}>
+                    Moderación
+                  </Link>
+                  <Link href="/revision/publicidad" className="text-base font-medium" onClick={() => setMenuOpen(false)}>
+                    Publicidad
+                  </Link>
+                  <form method="post" action="/auth/signout" className="inline">
+                    <button type="submit" className="text-base font-medium">
+                      Logout
+                    </button>
+                  </form>
+                </>
+              ) : (
+                <Link href="/revision/login" className="text-base font-medium" onClick={() => setMenuOpen(false)}>
+                  Redacción
+                </Link>
+              )}
             </nav>
           </div>
         </div>

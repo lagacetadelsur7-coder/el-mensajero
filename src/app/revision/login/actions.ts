@@ -4,87 +4,88 @@ import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/utils/supabase/server'
 
+const USER_MAP: Record<string, string> = {
+  cesarmensajero: 'cesar@elmensajero.com',
+  lauramensajera: 'laura@elmensajero.com',
+};
+const ALLOWED_EMAILS = ['cesar@elmensajero.com', 'laura@elmensajero.com'];
+
 export async function login(formData: FormData) {
   const supabase = await createClient();
 
   let email = formData.get('email') as string;
   const password = formData.get('password') as string;
 
-  // Map allowed usernames to their email addresses
-  const userMap: Record<string, string> = {
-    cesarmensajero: 'cesar@elmensajero.com',
-    lauramensajera: 'laura@elmensajero.com',
-  };
   const normalized = (email || '').toLowerCase().trim();
-  if (userMap[normalized]) {
-    email = userMap[normalized];
+  if (USER_MAP[normalized]) {
+    email = USER_MAP[normalized];
   }
 
   // Verify email belongs to allowed editors
-  const allowedEmails = ['cesar@elmensajero.com', 'laura@elmensajero.com'];
-  if (!allowedEmails.includes(email)) {
+  if (!ALLOWED_EMAILS.includes(email)) {
     redirect('/revision/login?error=unauthorized');
     return;
   }
 
-  // Validate password against environment variable
+  // Verify password matches secret
   const validPassword = process.env.EDITOR_PASSWORD;
   if (!validPassword || password !== validPassword) {
     redirect('/revision/login?error=invalid_password');
     return;
   }
 
-  // Attempt authentication with Supabase
-  const { error } = await supabase.auth.signInWithPassword({ email, password });
+  // Try to sign in with Supabase
+  const { error, data } = await supabase.auth.signInWithPassword({ email, password });
   if (error) {
+    // If sign-in fails, provide error
     redirect('/revision/login?error=true');
     return;
   }
 
-  revalidatePath('/', 'layout');
-  redirect('/revision');
+  if (error || !data.session) {
+    redirect('/revision/login?error=true')
+    return
+  }
+
+  // Supabase session cookie is now set; revalidate layout and go to editor panel
+  revalidatePath('/', 'layout')
+  redirect('/revision/newsroom')
 }
 
 export async function signup(formData: FormData) {
-  const supabase = await createClient();
+  const supabase = await createClient()
 
-  // No secret code required for registration; rely on server‑side controls if needed.
-  const emailInput = formData.get('email') as string;
-  const password = formData.get('password') as string;
+  const emailInput = formData.get('email') as string
+  const password = formData.get('password') as string
 
-  // Map allowed usernames to official emails
+  // Map allowed short usernames to real emails (same as login)
   const userMap: Record<string, string> = {
     cesarmensajero: 'cesar@elmensajero.com',
     lauramensajera: 'laura@elmensajero.com',
-  };
-  const normalized = (emailInput || '').toLowerCase().trim();
-  const email = userMap[normalized] || emailInput;
+  }
+  const normalized = (emailInput || '').toLowerCase().trim()
+  const email = userMap[normalized] || emailInput
 
-  // Validate that the email belongs to an allowed editor
-  const allowedEmails = [
-    'cesar@elmensajero.com',
-    'laura@elmensajero.com',
-  ];
-  const normalizedEmail = (email || '').toLowerCase();
-  if (!allowedEmails.includes(normalizedEmail)) {
-    redirect('/revision/login?error=unauthorized_email');
-    return;
+  // Verify allowed editors
+  const allowedEmails = ['cesar@elmensajero.com', 'laura@elmensajero.com']
+  if (!allowedEmails.includes(email)) {
+    redirect('/revision/login?error=unauthorized_email')
+    return
   }
 
-  // Validate password against environment variable
-  const validPassword = process.env.EDITOR_PASSWORD;
+  // Password must match the secret (same as login)
+  const validPassword = process.env.EDITOR_PASSWORD
   if (!validPassword || password !== validPassword) {
-    redirect('/revision/login?error=invalid_password');
-    return;
+    redirect('/revision/login?error=invalid_password')
+    return
   }
 
-  // Attempt registration with Supabase
-  const { error } = await supabase.auth.signUp({ email, password });
+  const { error } = await supabase.auth.signUp({ email, password })
   if (error) {
-    redirect('/revision/login?error=true');
-    return;
+    redirect('/revision/login?error=true')
+    return
   }
 
-  revalidatePath('/', 'layout');
-  redirect('/revision');
+  revalidatePath('/', 'layout')
+  redirect('/revision')
 }

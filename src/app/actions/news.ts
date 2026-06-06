@@ -69,7 +69,7 @@ export async function processNewsWithAI(items: NewsItem[]) {
   for (const item of items) {
     try {
       // Find a matching columnist or pick a random one
-      const columnista = columnistas.find(c => c.seccion_asignada === item.category) || columnistas[Math.floor(Math.random() * columnistas.length)]
+      const columnista = columnistas.find((c: any) => c.seccion_asignada === item.category) || columnistas[Math.floor(Math.random() * columnistas.length)]
 
       const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' })
 
